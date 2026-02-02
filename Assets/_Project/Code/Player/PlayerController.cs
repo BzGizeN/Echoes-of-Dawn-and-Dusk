@@ -10,6 +10,11 @@ public class PlayerController : MonoBehaviour
     public float rotationSpeed = 15f;
     public float acceleration = 10f;
 
+    [Header("Combat Visuals")]
+    public GameObject weaponInHandModel;
+    public GameObject weaponInSheathModel;
+    public bool startArmed = false;
+
     [Header("References")]
     public CharacterController characterController;
     public Animator animator;
@@ -20,6 +25,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 _moveInput;
     private Vector2 _mousePos;
     private bool _isSprinting;
+    private bool _isArmed;
 
     private Vector2 _currentAnimationBlend;
     private Vector2 _animationVelocity; 
@@ -28,8 +34,11 @@ public class PlayerController : MonoBehaviour
     {
         _inputActions = new InputSystem_Actions();
         _mainCamera = Camera.main;
+        
         if (characterController == null) characterController = GetComponent<CharacterController>();
         if (animator == null) animator = GetComponentInChildren<Animator>();
+
+        SetWeaponState(startArmed);
     }
 
     private void OnEnable() => _inputActions.Player.Enable();
@@ -40,6 +49,11 @@ public class PlayerController : MonoBehaviour
         ReadInput();
         HandleRotation();
         HandleMovement();
+
+        if (Keyboard.current.rKey.wasPressedThisFrame)
+        {
+            ToggleWeapon();
+        }
     }
 
     private void ReadInput()
@@ -97,5 +111,20 @@ public class PlayerController : MonoBehaviour
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
             }
         }
+    }
+
+    public void ToggleWeapon()
+    {
+        SetWeaponState(!_isArmed);
+    }
+
+    public void SetWeaponState(bool armed)
+    {
+        _isArmed = armed;
+
+
+        if (weaponInHandModel != null) weaponInHandModel.SetActive(_isArmed);
+        if (weaponInSheathModel != null) weaponInSheathModel.SetActive(!_isArmed);
+        
     }
 }
