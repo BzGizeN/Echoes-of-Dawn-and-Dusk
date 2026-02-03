@@ -1,7 +1,4 @@
 ﻿<Solution>
-  <Project Path="Enviro3.Editor.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Polyperfect.Common.csproj" />
-  <Project Path="Enviro3.Runtime.csproj" />
-  <Project Path="Assembly-CSharp-Editor.csproj" />
 </Solution>
